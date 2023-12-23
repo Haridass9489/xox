@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe game</title>
+     
+    <style>
+         body{
+            margin: 0;
+            padding: 0;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            background-color: rgb(130, 188, 69);
+         }
+         #gameBoard{
+            width: 300px;
+            height :300px;
+            background-color: rgb(207, 224, 132);
+            display: flex;
+            flex-wrap:wrap;
+            border: 1px solid black;
+         }
+         .square{
+            width: 100px;
+            height: 100px;
+            background-color: rgb(228, 198, 198);
+            border: 2px solid black;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+         }
+
+         .circle{
+            margin: auto;
+            height: 90px;
+            width: 90px;
+            border-radius: 50%;
+            border: 15px solid blue;
+            box-sizing: border-box;
+         }
+        .cross{
+            margin: auto;
+            height: 90px;
+            width: 90px;
+            background-color:rgb(255, 0, 0);
+            clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20%
+                               100%, 50% 70%, 80% 100%, 100% 80%, 
+                               70% 50%, 100% 20%, 80% 0%, 50% 30%);   
+        }
+ 
+         
+    </style>
+
+    
+
+</head>
+<body>
+    <h1 >TIC-TAC-TOE</h1>
+    <div id="gameBoard">
+
+    </div>
+    <p id="info"></p>
+    <button id="Restart">Restart</button>
+
+
+
+
+    <script>
+        const gameBoard = document.querySelector("#gameBoard")
+        const infoDisplay = document.querySelector("#info")
+        const startCells = ["","","","","","","","",""]
+        let go = "circle"
+        
+        const restart = document.getElementById("Restart")
+        restart.addEventListener("click",()=>{
+            window.location.reload();1
+        })
+
+        function createBoard() {
+            startCells.forEach((_cell,index) => {
+                const cellElement = document.createElement("div")
+                cellElement.classList.add("square")
+                cellElement.id = index;
+                cellElement.addEventListener('click',addGo)
+                gameBoard.append(cellElement)
+            });
+        }
+        createBoard()
+        function addGo(e){
+            const goDisplay = document.createElement("div")
+            goDisplay.classList.add(go)
+            e.target.append(goDisplay)
+            go = go === "circle" ? "cross" : "circle"
+             e.target.removeEventListener('click',addGo)
+             checkScore()
+        }
+        function checkScore(){
+            const allSquare = document.querySelectorAll(".square")
+            const winCombo = [
+                [0,1,2],[3,4,5],[6,7,8],
+                [0,3,6],[1,4,7],[2,5,8],
+                [0,4,8],[2,4,6]
+            ]
+
+            console.log(allSquare[0])
+
+            winCombo.forEach(Array =>{
+                const circleWins = Array.every(cell =>
+                      allSquare[cell].firstChild?.classList.contains("circle"))
+
+                if(circleWins){
+                    infoDisplay.innerHTML = "Circle Wins The Match"
+                    allSquare.forEach(square => square.replaceWith(square.cloneNode(true)))
+                    return
+                }      
+            })
+            winCombo.forEach(Array =>{
+                const crossWins = Array.every(cell =>
+                      allSquare[cell].firstChild?.classList.contains("cross"))
+
+                if(crossWins){
+                    infoDisplay.innerHTML = "Cross Wins The Match"
+                    allSquare.forEach(square => square.replaceWith(square.cloneNode(true)))
+                    return
+                }      
+            })
+        }
+        
+
+
+    </script>
+    
+</body>
+</html>
